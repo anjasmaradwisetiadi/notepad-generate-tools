@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "flowbite-react";
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
           </li>
           <li className="tracking-[-.01em]">
             Save and see your changes instantly.
+          </li>
+          <li>
+            <Button>Click me</Button>;
           </li>
         </ol>
 
