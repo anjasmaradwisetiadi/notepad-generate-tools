@@ -1,7 +1,37 @@
+'use client'
 import Image from "next/image";
 import { Button } from "flowbite-react";
+import {database} from "../firebase/config";
+import { ref, get, set } from "firebase/database";
+
 
 export default function Home() {
+  
+  const genereateDatabase = async ()=> {
+    const userId = "1";
+    const userName= "Anjasmara";
+    const email= "anjs@gmail.com"
+    const description = "description mencoba testing"
+
+    // try {
+    //   const headerRef = ref(database, 'anjas-code'); // Get ref of 'data'
+    //   const snapshot = await get(headerRef); // Get data of 'data'
+    //   console.log("snapshot.val() = ")
+    //   console.log(snapshot)
+    //   return snapshot.val();
+    // } catch (error) {
+    //   console.error('Error getting data:', error);
+    //   throw error;
+    // }
+
+    const db = database;
+    set(ref(db, 'users/' + userId), {
+      username: userName,
+      email: email,
+      description : description
+    });
+  }
+  
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -25,7 +55,10 @@ export default function Home() {
             Save and see your changes instantly.
           </li>
           <li>
-            <Button>Click me</Button>;
+            <Button onClick={()=>genereateDatabase()}>Click me</Button>;
+          </li>
+          <li>
+          <Button color="yellow">Yellow</Button>
           </li>
         </ol>
 

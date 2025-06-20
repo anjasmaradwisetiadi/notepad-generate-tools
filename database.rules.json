@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "$note": {
+      ".read": true,
+      ".write": true,
+      "text": { ".validate": true },
+      "$other": { ".validate": false }
+    }
+  }
+}
