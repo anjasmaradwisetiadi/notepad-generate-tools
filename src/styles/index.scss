@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "../app/note-worker/generate-tools/camel-case/CamelCase.module.scss";
