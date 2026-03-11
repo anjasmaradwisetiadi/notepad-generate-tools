@@ -13,8 +13,23 @@ const toastConfig = Swal.mixin({
 });
 
 const camelCasePattern = (inputText: string) => {
-  const text = 'Camel Case'
-  return text;
+  let text = inputText
+    .trim()
+    .split(" ")
+    .filter(word => {
+      if (word.length > 0) {
+        return word.toLowerCase();
+      }
+    });
+  text = text.map((word, index) => {
+    if (index > 0) {
+      const wordFirst = word[0].toUpperCase();
+      const wordReduce = word.slice(1);
+      return wordFirst + wordReduce.toLowerCase();
+    }
+    return word;
+  });
+  return text.join("");
 };
 
 const snakeCasePattern = (inputText: string) => {

@@ -17,12 +17,6 @@ export default function GenerateTools() {
         <TabItem title="Typing Interface" icon={HiClipboardList} className="w-full">
           <TypingInterface />
         </TabItem>
-        <TabItem title="Camel Case" icon={HiUserCircle} className="w-full">
-          <CamelCase />
-        </TabItem>
-        <TabItem title="Stripe Case" icon={HiAdjustments} className="w-full">
-          <StripeCase />
-        </TabItem>
       </Tabs>
     </div>
   );
