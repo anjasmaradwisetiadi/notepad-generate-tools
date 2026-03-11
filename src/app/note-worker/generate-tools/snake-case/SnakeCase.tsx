@@ -1,28 +1,73 @@
 import { Label, TextInput, Textarea, List, ListItem, ButtonGroup } from "flowbite-react";
 import { Button } from "flowbite-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { HiCheckCircle } from "react-icons/hi";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { toastConfig } from "@/app/shared/utilis/utilis";
+import { toastConfig, camelCasePattern, snakeCasePattern, stripCasePattern } from "@/app/shared/utilis/utilis";
+import { Card } from "flowbite-react";
+import styles from "./index.module.scss";
+import { MdCheckCircle } from "react-icons/md";
+import { textGeneratedDto } from "./text-generate.dto";
 
 export default function CamelCase() {
   const toast = toastConfig;
+  const listModeText: textGeneratedDto.listModeText[] = [
+    {
+      value: "strip-case",
+      label: "Strip"
+    },
+    {
+      value: "snake-case",
+      label: "Snake"
+    },
+    {
+      value: "camnel-case",
+      label: "Camel"
+    }
+  ];
 
+  const [modeText, setModeText] = useState({
+    value: "strip-case",
+    label: "Stripe"
+  });
   const [inputText, setInputText] = useState("");
-  const [resultText, setResultText] = useState("Result Your Text");
+  const [resultText, setResultText] = useState("");
 
-  const handleChangeInputResult = (e: Event) => {
+  const handleChangeInputResult = (e: ChangeEvent) => {
     const valueTarget = e.target as HTMLInputElement;
-    console.log("handleChangeInputResult = ");
-    console.log(valueTarget.value);
+    setInputText(valueTarget.value);
   };
   function generateText() {
     console.log("generateText = ");
+    let textConvert = "";
+    // snake-case convert
+    switch (modeText.value) {
+      case "camnel-case":
+        textConvert = camelCasePattern(inputText);
+        break;
+      case "snake-case":
+        textConvert = snakeCasePattern(inputText);
+        break;
+      default:
+        textConvert = stripCasePattern(inputText);
+        break;
+    }
+
+    setResultText(textConvert);
+    toast.fire({
+      icon: "success",
+      title: "Successfully convert text !"
+    });
   }
 
   function clearText() {
-    console.log("clearText = ");
+    setInputText("");
+    setResultText("");
+    toast.fire({
+      icon: "success",
+      title: "Successfully clear text !"
+    });
   }
 
   function copyText() {
@@ -31,14 +76,22 @@ export default function CamelCase() {
 
     toast.fire({
       icon: "success",
-      title: "Successfully copy text!"
+      title: "Successfully copy text !"
     });
   }
+
+  const textModeSelected = (val: textGeneratedDto.listModeText) => (event: React.MouseEvent<HTMLDivElement>) => {
+    setModeText({
+      value: val.value,
+      label: val.label
+    });
+  };
+
   return (
     <div className="grid items-center justify-items-center px-4 pb-4 gap-4 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-4 w-full row-start-2 items-center sm:items-start">
         <div className="w-full">
-          <h4 className="text-3xl mb-6">Generate Tools </h4>
+          <h4 className="text-2xl mb-6">Generate Text Tools </h4>
           <p>You can choice generate text where options:</p>
           <List>
             <ListItem icon={HiCheckCircle}>
@@ -55,26 +108,35 @@ export default function CamelCase() {
             </ListItem>
           </List>
         </div>
-        <div className="w-full flex mb-3">
-          <div className="me-2">
-            <Button className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white hover:bg-gradient-to-br focus:ring-blue-300 dark:focus:ring-blue-800">
-              Snake Case
-            </Button>
+        <div className="w-full mb-3">
+          <div className="">
+            <h4 className="text-xl mb-6">Choice Generate Text </h4>
           </div>
-          <div className="me-2">
-            <Button className="bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white hover:bg-gradient-to-br focus:ring-green-300 dark:focus:ring-green-800">
-              Camel Case
-            </Button>
-          </div>
-          <div className="me-2">
-            <Button className="bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 text-white hover:bg-gradient-to-br focus:ring-purple-300 dark:focus:ring-purple-800">
-              Stripe Case
-            </Button>
-          </div>
-          <div className="mx-8 px-8 border-l-2">
-            <Button className="bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 text-white hover:bg-gradient-to-br focus:ring-cyan-300 dark:focus:ring-cyan-800">
-              Generate Text
-            </Button>
+          <div className="option-text-container flex">
+            {listModeText.map((item, index) => {
+              return (
+                <div className="text-mode-case" key={index}>
+                  <div className={styles["card-style"] + " relative my-3 mx-5"} onClick={textModeSelected(item)}>
+                    {item.value === modeText.value && (
+                      <span
+                        className={
+                          styles["black_border"] +
+                          " absolute py-1 px-3 -left-6 -top-2 -rotate-[10deg] border bg-cyan-600 border-black text-white font-bold"
+                        }
+                      >
+                        <MdCheckCircle />
+                      </span>
+                    )}
+
+                    <div className={styles["purple_border"] + " p-4 border border-black"}>
+                      Mode
+                      <span className="font-mono text-cyan-700 font-bold"> {item.label} </span>
+                      Case
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div>
@@ -94,7 +156,7 @@ export default function CamelCase() {
               required
               rows={4}
               value={inputText}
-              onChange={() => handleChangeInputResult}
+              onChange={handleChangeInputResult}
             />
           </div>
           <div className="w-full flex mb-3 gap-x-6 my-4">
