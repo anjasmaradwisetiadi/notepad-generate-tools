@@ -10,7 +10,7 @@ import styles from "./index.module.scss";
 import { MdCheckCircle } from "react-icons/md";
 import { textGeneratedDto } from "./text-generate.dto";
 
-export default function CamelCase() {
+export default function GenerateText() {
   const toast = toastConfig;
   const listModeText: textGeneratedDto.listModeText[] = [
     {
@@ -39,9 +39,7 @@ export default function CamelCase() {
     setInputText(valueTarget.value);
   };
   function generateText() {
-    console.log("generateText = ");
     let textConvert = "";
-    // snake-case convert
     switch (modeText.value) {
       case "camnel-case":
         textConvert = camelCasePattern(inputText);
@@ -95,22 +93,22 @@ export default function CamelCase() {
           <p>You can choice generate text where options:</p>
           <List>
             <ListItem icon={HiCheckCircle}>
-              {" "}
+              &nbsp;
               <span className="ps-2"> Generate text to Snake Case</span>
             </ListItem>
             <ListItem icon={HiCheckCircle}>
-              {" "}
+              &nbsp;
               <span className="ps-2"> Generate text to Camel Case</span>
             </ListItem>
             <ListItem icon={HiCheckCircle}>
-              {" "}
+              &nbsp;
               <span className="ps-2"> Generate text to Stripe Case</span>
             </ListItem>
           </List>
         </div>
         <div className="w-full mb-3">
           <div className="">
-            <h4 className="text-xl mb-6">Choice Generate Text </h4>
+            <h4 className="text-xl mb-3">Choice Generate Text </h4>
           </div>
           <div className="option-text-container flex">
             {listModeText.map((item, index) => {
@@ -138,11 +136,6 @@ export default function CamelCase() {
               );
             })}
           </div>
-        </div>
-        <div>
-          <h2 className="text-2xl">
-            Mode : <span className="font-bold">Snake Case</span>
-          </h2>
         </div>
         <div className="w-full block">
           <div className="input-container">
