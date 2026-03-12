@@ -61,12 +61,11 @@ const stripCasePattern = (inputText: string) => {
 };
 
 const typingGenerator = (input: string, type: "json" | "object" | string) => {
-  const inputWhitesapce = input.replace(/\s/g, "").toString();
-  const jsonParse = JSON.parse(inputWhitesapce);
-  
   let resultText = ``;
-  let text = "text";
   if (type === "json") {
+    const inputWhitesapce = input.replace(/\s/g, "").toString();
+    const jsonParse = JSON.parse(inputWhitesapce);
+
     const objectEntries = Object.entries(jsonParse);
     objectEntries.forEach(([key, value], index) => {
       if (index === 0) {
@@ -79,10 +78,22 @@ const typingGenerator = (input: string, type: "json" | "object" | string) => {
         resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
       }
     });
-
-    text = "json";
   } else {
-    text = "object";
+    const inputWhitesapce = input.replace(/(\w+):/g, '"$1":');
+    const jsonParse = JSON.parse(inputWhitesapce);
+
+    const objectEntries = Object.entries(jsonParse);
+    objectEntries.forEach(([key, value], index) => {
+      if (index === 0) {
+        resultText += `{\n`;
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+      } else if (Object.entries(jsonParse).length - 1 === index) {
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+        resultText += `}`;
+      } else {
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+      }
+    });
   }
   return resultText;
 };
