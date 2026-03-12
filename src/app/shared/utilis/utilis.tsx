@@ -60,4 +60,56 @@ const stripCasePattern = (inputText: string) => {
   return text;
 };
 
-export { toastConfig, camelCasePattern, snakeCasePattern, stripCasePattern };
+const typingGenerator = (input: string, type: "json" | "object" | string) => {
+  const inputWhitesapce = input.replace(/\s/g, "").toString();
+  const jsonParse = JSON.parse(inputWhitesapce);
+  
+  let resultText = ``;
+  let text = "text";
+  if (type === "json") {
+    const objectEntries = Object.entries(jsonParse);
+    objectEntries.forEach(([key, value], index) => {
+      if (index === 0) {
+        resultText += `{\n`;
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+      } else if (Object.entries(jsonParse).length - 1 === index) {
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+        resultText += `}`;
+      } else {
+        resultText = formatingInterfaceGenerator(resultText, key, value, index, objectEntries);
+      }
+    });
+
+    text = "json";
+  } else {
+    text = "object";
+  }
+  return resultText;
+};
+
+const formatingInterfaceGenerator = (
+  resultText: string,
+  key: string,
+  value: any,
+  index: number,
+  jsonParse: [string, unknown][]
+) => {
+  if (typeof value === "string") {
+    resultText += `\t ${key}:string;\n`;
+  } else if (typeof value === "number") {
+    resultText += `\t ${key}:number;\n`;
+  } else if (typeof value === "boolean") {
+    resultText += `\t ${key}:boolean;\n`;
+  } else if (value === undefined) {
+    resultText += `\t ${key}:undefined;\n`;
+  } else if (value === null) {
+    resultText += `\t ${key}:null;\n`;
+  } else if (jsonParse.length - 1 === index) {
+    resultText += `\n}`;
+  } else {
+    resultText += ` \t ${key}:any;\n`;
+  }
+  return resultText;
+};
+
+export { toastConfig, camelCasePattern, snakeCasePattern, stripCasePattern, typingGenerator };
